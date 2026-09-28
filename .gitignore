@@ -1,0 +1,61 @@
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env.*.local
+*.pem
+*.key
+secrets.json
+
+# Preserve template
+!.env.example
+
+# ==========================================
+# Node.js & Dependency Directories
+# ==========================================
+node_modules/
+jspm_packages/
+.npm
+.node_repl_history
+package-lock.json.bak
+
+# ==========================================
+# Build & Distribution Artifacts
+# ==========================================
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# ==========================================
+# Logs & Debug Output
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# ==========================================
+# Testing & Code Coverage
+# ==========================================
+coverage/
+.nyc_output/
+.junit/
+
+# ==========================================
+# IDE & System Files
+# ==========================================
+.vscode/
+.idea/
+.gemini/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
