@@ -7,5 +7,7 @@ module.exports = {
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/insurewise_db',
   JWT_SECRET: process.env.JWT_SECRET || 'insurewise_default_secret_key',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
-  ML_SERVICE_URL: process.env.ML_SERVICE_URL || 'http://127.0.0.1:8000'
+  ML_SERVICE_URL: process.env.ML_SERVICE_URL || 'http://127.0.0.1:8000',
+  CLIENT_URL: process.env.CLIENT_URL || process.env.FRONTEND_URL
 };
+

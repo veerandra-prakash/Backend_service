@@ -5,12 +5,16 @@ const AppError = require('../utils/appError');
 class MLService {
   constructor() {
     this.client = axios.create({
-      baseURL: env.ML_SERVICE_URL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
       }
     });
+  }
+
+  get baseUrl() {
+    const rawUrl = env.ML_SERVICE_URL || 'http://127.0.0.1:8000';
+    return rawUrl.replace(/\/+$/, '');
   }
 
   /**
@@ -20,7 +24,7 @@ class MLService {
    */
   async getPrediction(inputData) {
     try {
-      const response = await this.client.post('/predict', inputData);
+      const response = await this.client.post(`${this.baseUrl}/predict`, inputData);
       
       // Response validation
       if (!response.data || typeof response.data.prediction !== 'number' || !response.data.explanation) {
@@ -41,7 +45,7 @@ class MLService {
         throw new AppError(`ML Service Error (${statusCode}): ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`, statusCode >= 500 ? 503 : 400);
       } else if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
         throw new AppError(
-          `Unable to connect to ML Service at ${env.ML_SERVICE_URL}. Please ensure the FastAPI server is running on http://127.0.0.1:8000.`,
+          `Unable to connect to ML Service at ${this.baseUrl}. Please verify the ML service is active.`,
           503
         );
       } else if (error.code === 'ECONNABORTED') {
@@ -60,16 +64,17 @@ class MLService {
    */
   async checkHealth() {
     try {
-      const response = await this.client.get('/health');
+      const response = await this.client.get(`${this.baseUrl}/health`);
       return response.data;
     } catch (error) {
       return {
         status: 'error',
         model_loaded: false,
-        message: `ML Service unreachable at ${env.ML_SERVICE_URL}`
+        message: `ML Service unreachable at ${this.baseUrl}`
       };
     }
   }
 }
 
 module.exports = new MLService();
+
