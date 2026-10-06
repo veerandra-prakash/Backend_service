@@ -88,11 +88,11 @@ class MLService {
    * Sends feature payload to FastAPI ML Service for inference & SHAP explainability.
    * Automatically retries when ML service is cold-starting / waking up on Render Free.
    * @param {Object} inputData - 20 feature input payload
-   * @param {number} maxRetries - Maximum retry attempts (default 12)
-   * @param {number} retryDelayMs - Delay between retries in ms (default 5000ms)
+   * @param {number} maxRetries - Maximum retry attempts (default 15)
+   * @param {number} retryDelayMs - Delay between retries in ms (default 3000ms)
    * @returns {Promise<{prediction: number, modelVersion: string, explanation: Object}>}
    */
-  async getPrediction(inputData, maxRetries = 12, retryDelayMs = 5000) {
+  async getPrediction(inputData, maxRetries = 15, retryDelayMs = 3000) {
     let lastError = null;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -100,7 +100,7 @@ class MLService {
         console.log(`[ML Service] ML prediction attempt ${attempt}/${maxRetries} -> ${this.baseUrl}/predict...`);
 
         const response = await this.client.post(`${this.baseUrl}/predict`, inputData, {
-          timeout: 12000
+          timeout: 10000
         });
 
         if (!response.data || typeof response.data.prediction !== 'number' || !response.data.explanation) {
