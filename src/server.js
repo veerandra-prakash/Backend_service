@@ -1,6 +1,7 @@
 const app = require('./app');
 const env = require('./config/env');
 const connectDB = require('./config/db');
+const mlService = require('./services/mlService');
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
@@ -18,6 +19,9 @@ const server = app.listen(env.PORT, () => {
   console.log(`  Environment: ${env.NODE_ENV}`);
   console.log(`  ML Service Proxy Target: ${env.ML_SERVICE_URL}`);
   console.log(`========================================================================`);
+
+  // Trigger non-blocking background warm-up request to ML service
+  mlService.warmup();
 });
 
 // Handle unhandled promise rejections
